@@ -10,6 +10,11 @@ class PolyTreeNode
     @value = value
   end
 
+  def inspect
+    "#{@value}: parents:'#{@parent ? @parent.value : "nil" }'
+    children:#{@children.map(:&value)}"
+  end
+
   def parent=(new_parent)
     return @parent = nil unless new_parent
     return if @parent == new_parent
