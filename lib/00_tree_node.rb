@@ -1,4 +1,4 @@
-
+require "byebug"
 
 class PolyTreeNode
   attr_reader :parent, :value
@@ -12,15 +12,18 @@ class PolyTreeNode
 
   def inspect
     "#{@value}: parents:'#{@parent ? @parent.value : "nil" }'
-    children:#{@children.map(:&value)}"
+    children:#{@children.map(&:value)}"
   end
 
   def parent=(new_parent)
-    return @parent = nil unless new_parent
+    unless new_parent
+      @parent = nil
+      return nil
+    end
     return if @parent == new_parent
     @parent.remove_child(self) if @parent
     @parent = new_parent
-    @parent.add_child(self) unless has_child?(self)
+    @parent.add_child(self) unless @parent.has_child?(self)
   end
 
   def has_child?(child)
@@ -57,6 +60,5 @@ class PolyTreeNode
     end
     nil
   end
-
 
 end

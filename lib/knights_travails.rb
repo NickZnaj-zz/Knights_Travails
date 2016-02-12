@@ -30,14 +30,26 @@ class KnightPathFinder
   end
 
   def find_path(stop)
-    @visited_positions = start
-
+    @visited_positions = [@start]
+    bfs(stop)
   end
 
-  def assign_children(parent)
+  def bfs(stopping_position)
+    queue = [@start]
+    until queue.empty?
+      search = queue.shift
+      return search if search.value == stopping_position
+      paths_of_the_knight(search)
+      queue.push *search.children
+    end
+    nil
+  end
+
+  def paths_of_the_knight(parent)
     parent_coords = parent.value
     children_pos = get_moves(parent_coords)
     children_pos.each do |pos|
+      debugger if self[pos].nil?
       self[pos].parent = parent
     end
   end
@@ -45,7 +57,7 @@ class KnightPathFinder
   def get_moves(pos)
     DELTA.map do |row, col|
       [row + pos[0], col + pos[1]]
-    end.select { |pos| in_bounds?(pos) && have_not_visited?(pos)}
+    end.select { |pos| in_bounds?(pos) && have_not_visited?(pos) }
   end
 
   def have_not_visited?(pos)
@@ -53,7 +65,7 @@ class KnightPathFinder
   end
 
   def in_bounds?(pos)
-    pos.all?{ |coord| (0..8).cover? coord }
+    pos.all? { |coord| (0...8).cover? coord }
   end
 
 end
