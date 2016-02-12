@@ -30,6 +30,8 @@ class KnightPathFinder
   end
 
   def find_path(stop)
+    @visited_positions = start
+
   end
 
   def assign_children(parent)
@@ -43,7 +45,11 @@ class KnightPathFinder
   def get_moves(pos)
     DELTA.map do |row, col|
       [row + pos[0], col + pos[1]]
-    end.select { |pos| in_bounds?(pos) }
+    end.select { |pos| in_bounds?(pos) && have_not_visited?(pos)}
+  end
+
+  def have_not_visited?(pos)
+    !@visited_positions.include?(pos)
   end
 
   def in_bounds?(pos)
